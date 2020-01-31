@@ -3,21 +3,20 @@ import java.lang.Thread;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.io.BufferedReader;
 
 
-public class ServerThread extends Thread{
+public class ClientThread extends Thread{
+    
      private String  newMessage;
      private Socket client;
-     private ServerSocket serverSocket;
      private List<String> htmlFile; 
      private List<String> jsonFile; 
 
-     public ServerThread(ServerSocket serverSocket, List<String> htmlFile, List<String> jsonFile ){
-          this.serverSocket = serverSocket;
+     public ClientThread( Socket client, List<String> htmlFile, List<String> jsonFile ){
+          this.client = client;
           this.htmlFile = htmlFile;
           this.jsonFile=jsonFile;
      }
@@ -27,16 +26,15 @@ public class ServerThread extends Thread{
           StringBuilder finalResult = new StringBuilder();
           for (String line :file) {
             finalResult.append(line);
+            finalResult.append("\n");
         }
         return finalResult;
         }
     
      @Override
      public void run(){
-          try {
-               // while (true) {
-                    client = serverSocket.accept();
-                    System.out.println("New user connected");
+          try {    
+                System.out.println("New user connected");
                     InputStream is = client.getInputStream();
                     BufferedReader br = new BufferedReader(new InputStreamReader(is));
                     OutputStream ous = client.getOutputStream();
